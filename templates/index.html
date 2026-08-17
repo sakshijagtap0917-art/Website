@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Analyzer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Resume Analyzer</h1>
+
+        <p class="subtitle">
+            Upload your resume and get a quick ATS-style analysis.
+        </p>
+
+        <form method="POST"
+              enctype="multipart/form-data">
+
+            <div class="upload-box">
+
+                <input type="file"
+                       name="resume"
+                       accept=".pdf"
+                       required>
+
+                <p>Upload PDF Resume</p>
+
+            </div>
+
+            <button type="submit">
+                Analyze Resume
+            </button>
+
+        </form>
+
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        {% if result %}
+
+        <div class="result">
+
+            <h2>Analysis Result</h2>
+
+            <div class="score">
+                ATS Score: {{ result.score }}/100
+            </div>
+
+
+            <h3>Skills Detected</h3>
+
+            {% if result.skills %}
+
+            <div class="skills">
+
+                {% for skill in result.skills %}
+
+                <span>{{ skill }}</span>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <p>No technical skills detected.</p>
+
+            {% endif %}
+
+
+            <h3>Education Details</h3>
+
+{% if result.education %}
+
+<ul>
+    {% for education in result.education %}
+    <li>{{ education }}</li>
+    {% endfor %}
+</ul>
+
+{% else %}
+
+<p>No education details detected.</p>
+
+{% endif %}
+
+
+            <h3>Experience Keywords</h3>
+
+{% if result.experience %}
+
+<div class="skills">
+
+    {% for experience in result.experience %}
+
+    <span>{{ experience }}</span>
+
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<p>No experience keywords detected.</p>
+
+{% endif %}
+
+
+            <h3>Suggestions</h3>
+
+            <ul>
+
+                {% for suggestion in result.suggestions %}
+
+                <li>{{ suggestion }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
